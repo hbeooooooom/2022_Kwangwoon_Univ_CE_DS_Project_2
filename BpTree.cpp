@@ -12,7 +12,7 @@ BpTreeNode* BpTree::searchDataNode(int n) {
 }
 
 void BpTree::splitDataNode(BpTreeNode* pDataNode) {
-	
+	int a=0;
 }
 
 void BpTree::splitIndexNode(BpTreeNode* pIndexNode) {
