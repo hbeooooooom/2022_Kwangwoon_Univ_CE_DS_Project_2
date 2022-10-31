@@ -1,7 +1,9 @@
 #pragma once
 #include "FPGrowth.h"
 #include "BpTree.h"
-
+#include<iostream>
+#include<fstream>
+using namespace std;
 class Manager
 {
 private:
@@ -11,7 +13,9 @@ private:
 public:
 	Manager(int threshold, int bpOrder)	//constructor
 	{
-		/* You must fill here */
+		flog.open(RESULT_LOG_PATH,ios::app);
+		fpgrowth = new FPGrowth(&flog,threshold);
+		
 	}
 
 
@@ -23,7 +27,7 @@ public:
 	ifstream fin;
 	ofstream flog;
 	
-
+	char * RESULT_LOG_PATH = "log.txt";//log file
 	void run(const char* command);
 	bool LOAD();
 	bool BTLOAD();

@@ -15,7 +15,7 @@ private:
 	ofstream* fout;
 	ofstream flog;
 public:
-	FPGrowth(ofstream *fout, int threshold = 3) {
+	FPGrowth(ofstream *fout, int threshold) {
 		this->threshold = threshold;
 		flog.open("result.txt", ios::app);
 		flog.setf(ios::fixed);

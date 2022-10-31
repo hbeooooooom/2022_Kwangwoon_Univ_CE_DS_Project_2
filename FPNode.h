@@ -8,6 +8,7 @@ class FPNode
 {
 private:
 	int frequency;
+	char *item = new char[50];
 	FPNode* parent;
 	FPNode* next;
 	map<string, FPNode*> children;
