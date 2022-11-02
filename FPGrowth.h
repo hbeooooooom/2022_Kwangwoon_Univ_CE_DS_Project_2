@@ -40,7 +40,7 @@ public:
 	FPNode* getTree() { return fpTree; }
 	HeaderTable* getHeaderTable() { return table; }
 
-	bool printList();
+	bool printList(ofstream &fout);
 	bool printTree();
 	void saveFrequentPatterns();
 

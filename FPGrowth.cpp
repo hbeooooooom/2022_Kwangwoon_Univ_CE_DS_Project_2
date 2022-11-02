@@ -39,7 +39,14 @@ void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> d
 	powerSet(FrequentPattern, data, item, frequency, ptr, depth + 1);
 }
 
-bool FPGrowth::printList() {
+bool FPGrowth::printList(ofstream &fout) {
+	list<pair<int, string>> li = table->getindexTable();
+	list<pair<int, string>>::iterator it;
+	fout<<"Item		Frequency"<<endl;
+	for(it = li.begin(); it!= li.end(); it++){
+		fout <<it->second<<"	  "<<it->first<<endl;
+		it++;
+	}
 
 	return true;
 }

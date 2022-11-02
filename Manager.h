@@ -13,8 +13,8 @@ private:
 public:
 	Manager(int threshold, int bpOrder)	//constructor
 	{
-		flog.open(RESULT_LOG_PATH,ios::app);
-		fpgrowth = new FPGrowth(&flog,threshold);
+		fout.open(RESULT_LOG_PATH,ios::out);
+		fpgrowth = new FPGrowth(&fout,threshold);
 		
 	}
 
@@ -25,7 +25,7 @@ public:
 	}
 
 	ifstream fin;
-	ofstream flog;
+	ofstream fout;
 	
 	char * RESULT_LOG_PATH = "log.txt";//log file
 	void run(const char* command);

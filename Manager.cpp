@@ -5,7 +5,7 @@ void Manager::run(const char* command)
 	fin.open(command);
 	if(!fin)//if file not open print
 	{
-		flog << "File Open Error" << endl;
+		fout << "File Open Error" << endl;
 		return;
 	}
 	char cmd[100];
@@ -16,19 +16,36 @@ void Manager::run(const char* command)
 		if(command ==NULL)
 			continue;
 		if(strcmp(command, "LOAD")==0){//if command LOAD
-			flog<<"========LOAD========"<<endl;
-			bool a = LOAD();
+			fout<<"========LOAD========"<<endl;
+			bool a = LOAD();//check true or false
 			if(a==true){
-				flog<<"Success"<<endl;
+				fout<<"Success"<<endl;
 			}
 			else{
-				flog<<"ERROR 100"<<endl;
+				fout<<"ERROR 100"<<endl;
 			}
-			flog<<"===================="<<endl;
+			fout<<"===================="<<endl;
+		}
+		else if(strcmp(command,"PRINT_ITEMLIST")==0){// if command PRINT_ITEMLIST
+			if(PRINT_ITEMLIST()){
+				fout<<"ERROR 300"<<endl;
+				fout<<"======================"<<endl;
+			}
+			
 		}
 	}
 	fin.close();
 	return;
+}
+bool Manager::PRINT_ITEMLIST(){
+	fout<<"=======PRINT_ITEMLIST======="<<endl;
+	if(fpgrowth->printList(fout)){ // if not empty Header Table
+		fout<<"======================"<<endl;
+		return true;
+	}
+	else//if empty
+		return false;
+	
 }
 
 bool Manager::LOAD()
@@ -66,7 +83,7 @@ bool Manager::LOAD()
 	market.close();
 	temp = NULL;
 	market.open("market.txt");
-	//fpgrowth->getHeaderTable()->insertDataNode(fpgrowth->getHeaderTable());
+	/*fpgrowth->getHeaderTable()->insertDataNode(fpgrowth->getHeaderTable());
 	char buf3[1000] ={0};
 	char buf4[1000] ={0};
 	if(!market){
@@ -94,9 +111,9 @@ bool Manager::LOAD()
 			if(temp == NULL){
 				continue;
 			}
-			fpgrowth->createFPtree();
+			//fpgrowth->createFPtree();
 		}
-	}
+	}*/
 	return true;
 }
 
@@ -109,9 +126,6 @@ bool Manager::BTLOAD()
 	return true;
 }
 
-bool Manager::PRINT_ITEMLIST() {
-	
-}
 
 bool Manager::PRINT_FPTREE() {
 	
@@ -131,11 +145,11 @@ bool Manager::PRINT_RANGE(char* item, int start, int end) {
 
 void Manager::printErrorCode(int n) {				//ERROR CODE PRINT
 	//flog << ERROR " << n << " << endl;
-	flog << "=======================" << endl << endl;
+	fout << "=======================" << endl << endl;
 }
 
 void Manager::printSuccessCode() {//SUCCESS CODE PRINT 
-	flog << "Success" << endl;
-	flog << "=======================" << endl << endl;
+	fout << "Success" << endl;
+	fout << "=======================" << endl << endl;
 }
 
