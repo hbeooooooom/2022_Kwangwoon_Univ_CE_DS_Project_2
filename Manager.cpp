@@ -40,7 +40,6 @@ void Manager::run(const char* command)
 bool Manager::PRINT_ITEMLIST(){
 	fout<<"=======PRINT_ITEMLIST======="<<endl;
 	if(fpgrowth->printList(fout)){ // if not empty Header Table
-		fout<<"======================"<<endl;
 		return true;
 	}
 	else//if empty
@@ -82,38 +81,9 @@ bool Manager::LOAD()
 	}
 	market.close();
 	temp = NULL;
-	market.open("market.txt");
-	/*fpgrowth->getHeaderTable()->insertDataNode(fpgrowth->getHeaderTable());
-	char buf3[1000] ={0};
-	char buf4[1000] ={0};
-	if(!market){
-		return false;
-	}
-	else{
-		while(!market.eof()){
-			market.getline(buf3,1000);
-			strcpy(buf4,buf3);
-			list<string> stringlist;
-			temp = strtok(buf3," ");
-			if(temp == NULL){
-				continue;
-			}
-			temp = strtok(NULL, "	");
-			while(temp !=NULL){
-				temp=strtok(NULL,"	");
-			}
-			temp = strtok(buf4,"	");
-			while(temp != NULL){
-				string string_temp = temp;
-				stringlist.push_back(string_temp);
-				temp = strtok(NULL, "	");
-			}
-			if(temp == NULL){
-				continue;
-			}
-			//fpgrowth->createFPtree();
-		}
-	}*/
+	//market.open("market.txt");
+	//fpgrowth->insertDataNode(fpgrowth->getHeaderTable()); //make data table
+	
 	return true;
 }
 

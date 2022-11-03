@@ -4,7 +4,9 @@ HeaderTable::~HeaderTable() {
 
 }
 
-
+void HeaderTable::insertDataNode(HeaderTable* table){
+	
+}
 void HeaderTable::insertTable(char* item, int frequency) {
 	string change_item = item;//change string
 	if(frequency == 0){

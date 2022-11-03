@@ -17,7 +17,7 @@ public:
 	void descendingIndexTable() { indexTable.sort(greater<pair<int, string>>()); }
 	void ascendingIndexTable() { indexTable.sort(); }
 	int find_frequency(string item);
-	//void insertDataNode(HeaderTable* table);
+	void insertDataNode(HeaderTable* table);
 };
 
 
