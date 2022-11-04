@@ -115,16 +115,19 @@ void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> d
 bool FPGrowth::printList() {
 	list<pair<int, string>> li = table->getindexTable();
 	if(li.begin()!=li.end()) *fout<<"Item		Frequency"<<endl;
+	else return false;
 	for(list<pair<int, string>>::iterator it = li.begin(); it!= li.end(); it++){
 		*fout <<it->second<<"	  "<<it->first<<endl;
 	}
 	return true;
 }
 bool FPGrowth::printTree() {
-	*fout<<"{StandardItem.Frequency}		(Path_Item.Frequency)"<<endl;
+	
 	table->ascendingIndexTable(); // ascending index table
 	list<pair<int,string>> idxTable = table->getindexTable();
-	map<string, FPNode*> currNode;
+	if(idxTable.empty()==1){return false;}
+	
+	*fout<<"{StandardItem.Frequency}		(Path_Item.Frequency)"<<endl;
 	FPNode* curFP_Node;
 	FPNode* up;
 	FPNode* next;

@@ -26,8 +26,14 @@ void Manager::run(const char* command)
 			}
 			fout<<"===================="<<endl;
 		}
+		else if(strcmp(command,"BTLOAD")==0){
+			fout<<"========BTLOAD========"<<endl;
+			
+		}
 		else if(strcmp(command,"PRINT_ITEMLIST")==0){// if command PRINT_ITEMLIST
-			if(!PRINT_ITEMLIST()){
+			bool a = PRINT_ITEMLIST();
+			if(a == false){
+
 				fout<<"ERROR 300"<<endl;
 				fout<<"======================"<<endl;
 			}
@@ -37,9 +43,12 @@ void Manager::run(const char* command)
 		}
 		else if(strcmp(command,"PRINT_FPTREE")==0){
 			fout<<"========PRINT_FPTREE======="<<endl;
-			if(!PRINT_FPTREE()){
-				printErrorCode(400);
+			bool a = PRINT_FPTREE();
+			if(a== true){
+				fout<<"============================"<<endl;
 			}
+			else 
+				printErrorCode(400);
 		}
 	}
 	fin.close();
@@ -47,14 +56,14 @@ void Manager::run(const char* command)
 }
 bool Manager::PRINT_ITEMLIST(){
 	fout<<"=======PRINT_ITEMLIST======="<<endl;
-	if(fpgrowth->printList()){ // if not empty Header Table
+	bool a = fpgrowth->printList();
+	if(a){ // if not empty Header Table
 		return true;
 	}
 	else//if empty
 		return false;
 	
 }
-
 bool Manager::LOAD()
 {
 	list<string> data_list;
@@ -127,7 +136,8 @@ bool Manager::BTLOAD()
 
 
 bool Manager::PRINT_FPTREE() {
-	if(fpgrowth->printTree()){
+	bool a = fpgrowth->printTree();
+	if( a==true){
 		return true;
 	}
 	else
