@@ -18,6 +18,7 @@ public:
 	void ascendingIndexTable() { indexTable.sort(); }
 	int find_frequency(string item);
 	void insertDataNode(HeaderTable* table);
+	void conNode(string item, FPNode* no) { dataTable.find(item)->second = no; }
 };
 
 

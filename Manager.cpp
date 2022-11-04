@@ -27,11 +27,19 @@ void Manager::run(const char* command)
 			fout<<"===================="<<endl;
 		}
 		else if(strcmp(command,"PRINT_ITEMLIST")==0){// if command PRINT_ITEMLIST
-			if(PRINT_ITEMLIST()){
+			if(!PRINT_ITEMLIST()){
 				fout<<"ERROR 300"<<endl;
 				fout<<"======================"<<endl;
 			}
-			
+			else{
+				fout<<"================"<<endl;
+			}
+		}
+		else if(strcmp(command,"PRINT_FPTREE")==0){
+			fout<<"========PRINT_FPTREE======="<<endl;
+			if(!PRINT_FPTREE()){
+				printErrorCode(400);
+			}
 		}
 	}
 	fin.close();
@@ -39,7 +47,7 @@ void Manager::run(const char* command)
 }
 bool Manager::PRINT_ITEMLIST(){
 	fout<<"=======PRINT_ITEMLIST======="<<endl;
-	if(fpgrowth->printList(fout)){ // if not empty Header Table
+	if(fpgrowth->printList()){ // if not empty Header Table
 		return true;
 	}
 	else//if empty
@@ -49,17 +57,19 @@ bool Manager::PRINT_ITEMLIST(){
 
 bool Manager::LOAD()
 {
+	list<string> data_list;
+	
 	ifstream market;
 	market.open("market.txt");
 	if(!market){
 		return false;
 	}
-	char buf1[1000] = {0};
-	char buf2[1000] = {0};
+	char buf1[10000] = {0};
+	char buf2[10000] = {0};
 	char* temp = NULL;
 
 	while(!market.eof()){
-		market.getline(buf1,1000);
+		market.getline(buf1,10000);
 		strcpy(buf2,buf1);
 		temp = strtok(buf1,"	");
 		if(temp == NULL){
@@ -80,16 +90,35 @@ bool Manager::LOAD()
 		}
 	}
 	market.close();
+	fpgrowth->getHeaderTable()->insertDataNode(fpgrowth->getHeaderTable()); //make data table
 	temp = NULL;
-	//market.open("market.txt");
-	//fpgrowth->insertDataNode(fpgrowth->getHeaderTable()); //make data table
-	
+	market.open("market.txt");
+	while(!market.eof()){
+		market.getline(buf1, 10000);
+		strcpy(buf2,buf1);
+		list<string>buylist;
+		temp = strtok(buf1, "	");
+		if(temp == NULL){
+			continue;
+		}
+		temp = strtok(NULL,"	");
+		while (temp != NULL) {
+			temp = strtok(NULL, "	");
+		}
+		temp = strtok(buf2, "	");
+		while(temp!=NULL){
+			string string_temp = temp;
+			buylist.push_back(string_temp);
+			temp = strtok(NULL, "	");
+			if(temp == NULL){
+				continue;
+			}
+		}
+		fpgrowth->createFPtree(fpgrowth->getTree(), fpgrowth->getHeaderTable(), buylist, 1);//make fptree
+	}
+	market.close();
 	return true;
 }
-
-
-
-
 bool Manager::BTLOAD()
 {
 	
@@ -98,23 +127,16 @@ bool Manager::BTLOAD()
 
 
 bool Manager::PRINT_FPTREE() {
-	
+	if(fpgrowth->printTree()){
+		return true;
+	}
+	else
+		return false;
 }
 
-bool Manager::PRINT_BPTREE(char* item, int min_frequency) {
-	
-}
-
-bool Manager::PRINT_CONFIDENCE(char* item, double rate) {
-	
-}
-
-bool Manager::PRINT_RANGE(char* item, int start, int end) {
-	
-}
 
 void Manager::printErrorCode(int n) {				//ERROR CODE PRINT
-	//flog << ERROR " << n << " << endl;
+	fout << "ERROR " << n << endl;
 	fout << "=======================" << endl << endl;
 }
 

@@ -2,9 +2,6 @@
 
 FPNode::FPNode()	//constructor
 {
-	for(int i =0; i<50; i++){
-		item[i] = 0;
-	}
 	parent = NULL;
 	next = NULL;
 	frequency = 0;

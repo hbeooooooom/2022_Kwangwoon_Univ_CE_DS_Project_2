@@ -9,8 +9,8 @@ class FPGrowth
 {
 private:
 	int threshold;
-	FPNode* fpTree;
-	HeaderTable* table;
+	FPNode* fpTree; //this is root
+	HeaderTable* table; //this is first 
 	map<set<string>, int> frequenctPatterns;
 	ofstream* fout;
 	ofstream flog;
@@ -39,7 +39,7 @@ public:
 	FPNode* getTree() { return fpTree; }
 	HeaderTable* getHeaderTable() { return table; }
 
-	bool printList(ofstream &fout);
+	bool printList();
 	bool printTree();
 	void saveFrequentPatterns();
 

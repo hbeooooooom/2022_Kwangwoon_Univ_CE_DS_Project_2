@@ -5,7 +5,11 @@ HeaderTable::~HeaderTable() {
 }
 
 void HeaderTable::insertDataNode(HeaderTable* table){
-	
+	list<pair<int,string>> lista = table->getindexTable();
+	for(list<pair<int,string>>::iterator iter = lista.begin(); iter!=lista.end(); iter++){
+		FPNode* food_ptr = new FPNode;
+		dataTable.insert({iter->second,food_ptr});
+	}
 }
 void HeaderTable::insertTable(char* item, int frequency) {
 	string change_item = item;//change string
