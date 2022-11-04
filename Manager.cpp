@@ -19,26 +19,30 @@ void Manager::run(const char* command)
 			fout<<"========LOAD========"<<endl;
 			bool a = LOAD();//check true or false
 			if(a==true){
-				fout<<"Success"<<endl;
+				printSuccessCode();
 			}
 			else{
-				fout<<"ERROR 100"<<endl;
+				printErrorCode(100);
 			}
-			fout<<"===================="<<endl;
+			
 		}
 		else if(strcmp(command,"BTLOAD")==0){
 			fout<<"========BTLOAD========"<<endl;
-			
+			bool a = BTLOAD();
+			if(a==true){
+				printSuccessCode();
+			}
+			else
+				printErrorCode(200);
+
 		}
 		else if(strcmp(command,"PRINT_ITEMLIST")==0){// if command PRINT_ITEMLIST
 			bool a = PRINT_ITEMLIST();
 			if(a == false){
-
-				fout<<"ERROR 300"<<endl;
-				fout<<"======================"<<endl;
+				printErrorCode(300);
 			}
 			else{
-				fout<<"================"<<endl;
+				fout<<"=================="<<endl;
 			}
 		}
 		else if(strcmp(command,"PRINT_FPTREE")==0){
@@ -130,7 +134,17 @@ bool Manager::LOAD()
 }
 bool Manager::BTLOAD()
 {
-	
+	ifstream result;
+	result.open("result.txt");
+	if(!result){
+		return false;
+	}
+	char buf1[10000] ={0};
+	char buf2[10000] = {0};
+	char* temp = NULL;
+	while(!result.eof()){
+		result.getline(buf1,10000);
+	}
 	return true;
 }
 
