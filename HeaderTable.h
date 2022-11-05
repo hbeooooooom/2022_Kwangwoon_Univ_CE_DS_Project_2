@@ -8,6 +8,7 @@ private:
 	list<pair<int, string> > indexTable;
 	map<string, FPNode*> dataTable;
 public:
+	
 	HeaderTable() { }
 	~HeaderTable();
 	void insertTable(char* item, int frequency);

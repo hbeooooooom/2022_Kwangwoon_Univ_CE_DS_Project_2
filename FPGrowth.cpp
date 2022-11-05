@@ -6,53 +6,54 @@ FPGrowth::~FPGrowth() {
 }
 
 void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_array, int frequency) {
-	list<pair<int,string>>idxtable = table->getindexTable(); //get indexdata
-	for(list<string>::iterator customer_iter = item_array.begin(); customer_iter != item_array.end();) //customer buy list
+	list<pair<int, string>>idxtable = table->getindexTable(); //get indexdata
+	for (list<string>::iterator customer_iter = item_array.begin(); customer_iter != item_array.end();) //customer buy list
 	{
-		for(list<pair<int, string>>::iterator frequence_iter = idxtable.begin(); frequence_iter!=idxtable.end();frequence_iter++) // headertable list
+		for (list<pair<int, string>>::iterator frequence_iter = idxtable.begin(); frequence_iter != idxtable.end(); frequence_iter++) // headertable list
 		{
-			if(frequence_iter->second == *customer_iter) //if same item
+			if (frequence_iter->second == *customer_iter) //if same item
 			{
-				if(frequence_iter->first < threshold) //if frequency < threshold delete item
+				if (frequence_iter->first < threshold) //if frequency < threshold delete item
 				{
 					customer_iter = item_array.erase(customer_iter);// delete and return next
 				}
 				else { customer_iter++; }
 				break;
 			}
-			
+
 		}
 	}
-	list<pair<int,string>> sorting_list; //sort list with frequency
-	for(list<string>::iterator customer_iter = item_array.begin(); customer_iter != item_array.end();customer_iter++)//customer buy list
+	list<pair<int, string>> sorting_list; //sort list with frequency
+
+	for (list<string>::iterator customer_iter = item_array.begin(); customer_iter != item_array.end(); customer_iter++)//customer buy list
 	{
-		for(list<pair<int, string>>::iterator frequence_iter = idxtable.begin(); frequence_iter!=idxtable.end();frequence_iter++)
+		for (list<pair<int, string>>::iterator frequence_iter = idxtable.begin(); frequence_iter != idxtable.end(); frequence_iter++)
 		{
-			if(frequence_iter->second == *customer_iter)
+			if (frequence_iter->second == *customer_iter)
 			{
-				sorting_list.push_back({frequence_iter->first, frequence_iter->second});
+				sorting_list.push_back({ frequence_iter->first, frequence_iter->second });
 				break;
 			}
 		}
 
 	}
-	sorting_list.sort(greater<pair<int,string>>());//sort frequency greater
+	sorting_list.sort(greater<pair<int, string>>());//sort frequency greater
+	
 	FPNode* currNode = root;
 
-	for(list<pair<int,string>>::iterator iter = sorting_list.begin(); iter !=sorting_list.end();iter++){ //make fp tree and connect table , node
+	for (list<pair<int, string>>::iterator iter = sorting_list.begin(); iter != sorting_list.end(); iter++) { //make fp tree and connect table , node
 		FPNode* child_node = currNode->getChildrenNode(iter->second);//because root is NULL
-		if(child_node == NULL){//item in tree is false
+		if (child_node == NULL) {//item in tree is false
 			FPNode* newNode = new FPNode;
-			//char* temp = new char[50];
 			string str = iter->second;
 			newNode->setItem(str);
 			newNode->setParent(currNode);
 			newNode->updateFrequency(1);
-			currNode->pushchildren(str,newNode);
-			connectNode(table, str,newNode);
+			currNode->pushchildren(str, newNode);
+			connectNode(table, str, newNode);
 			currNode = newNode;
 		}
-		else{
+		else {
 			currNode = child_node;
 			currNode->updateFrequency(1);
 		}
@@ -60,12 +61,12 @@ void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_
 }
 
 void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node) {
-	FPNode * currNode;
-	map<string, FPNode*> DATA_Table= table->getdataTable();
-	for(map<string,FPNode*>::iterator iter = DATA_Table.begin();iter!=DATA_Table.end();iter++){
-		if(iter->first == item)
+	FPNode* currNode;
+	map<string, FPNode*> DATA_Table = table->getdataTable();
+	for (map<string, FPNode*>::iterator iter = DATA_Table.begin(); iter != DATA_Table.end(); iter++) {
+		if (iter->first == item)
 		{
-			if(iter->second->getFrequency()==0) //if FPNode is empty
+			if (iter->second->getFrequency() == 0) //if FPNode is empty
 			{
 				table->conNode(item, node);
 				//DATA_Table.find(item)->second = node; //connect node
@@ -73,9 +74,9 @@ void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node) {
 			}
 			else
 			{
-				currNode= iter->second;
-				while(1){
-					if(currNode->getNext() == NULL){
+				currNode = iter->second;
+				while (1) {
+					if (currNode->getNext() == NULL) {
 						break;
 					}
 					currNode = currNode->getNext();
@@ -93,12 +94,65 @@ bool FPGrowth::contains_single_path(FPNode* pNode) {
 	return contains_single_path(pNode->getChildren().begin()->second);
 }
 
-map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* pTable, FPNode* pTree) {
+map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* Tree) {
+	Table->ascendingIndexTable();
+	map<string, FPNode*> dataTable = Table->getdataTable();
+	list<pair<int, string>> idxTable = Table->getindexTable();
+	FPNode* currNode;
 
-	return {};
+	int k;
+	for (list<pair<int, string>>::iterator iter = idxTable.begin(); iter != idxTable.end(); iter++)
+	{
+		if (iter->first >= threshold)// if indexNode frequency > threshold
+		{
+			for (map<string, FPNode*>::iterator iter2 = dataTable.begin(); iter2 != dataTable.end(); iter2++)
+			{
+				if (iter2->first.compare(iter->second) == 0)
+				{
+					FPNode* currNode = iter2->second;//찾은걸 노드로 연결
+					cout << currNode->getItem() << " " << currNode->getFrequency() << endl;//확인용 지울것
+					while (1) {
+						if (currNode->getFrequency() >= threshold)
+						{
+							set<string> pattern_set;
+							k = currNode->getFrequency();
+							while (1)
+							{
+								pattern_set.insert(currNode->getItem());
+								if (currNode->getParent() == NULL)	break;
+								currNode = currNode->getParent();
+							}
+							frequenctPatterns.insert(make_pair(pattern_set, k));
+						}
+						
+							if (currNode->getNext() == NULL) break;
+							currNode = currNode->getNext();
+						
+					}
+				}
+			}
+		}
+	}
+
+	return  frequenctPatterns;
 }
 
-
+bool FPGrowth::printPatern()
+{
+	if (frequenctPatterns.begin() == frequenctPatterns.end())
+		return false;
+	for (map<set<string>, int>::iterator iter = frequenctPatterns.begin(); iter != frequenctPatterns.end(); iter++)
+	{
+		flog << iter->second << "	";
+		set<string>temp = iter->first;
+		for (set<string>::iterator iter2 = temp.begin(); iter2 != temp.end(); iter2++)
+		{
+			flog << *iter2 << "	";
+		}
+		flog << endl;
+	}
+	return true;
+}
 
 void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> data, string item, int frequency, int* ptr, int depth) {
 	if (data.size() == depth) {
@@ -114,24 +168,24 @@ void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> d
 
 bool FPGrowth::printList() {
 	list<pair<int, string>> li = table->getindexTable();
-	if(li.begin()!=li.end()) *fout<<"Item		Frequency"<<endl;
+	if (li.begin() != li.end()) *fout << "Item		Frequency" << endl;
 	else return false;
-	for(list<pair<int, string>>::iterator it = li.begin(); it!= li.end(); it++){
-		*fout <<it->second<<"	  "<<it->first<<endl;
+	for (list<pair<int, string>>::iterator it = li.begin(); it != li.end(); it++) {
+		*fout << it->second << "	  " << it->first << endl;
 	}
 	return true;
 }
 bool FPGrowth::printTree() {
-	
+
 	table->ascendingIndexTable(); // ascending index table
-	list<pair<int,string>> idxTable = table->getindexTable();
-	if(idxTable.empty()==1){return false;}
-	
-	*fout<<"{StandardItem.Frequency}		(Path_Item.Frequency)"<<endl;
+	list<pair<int, string>> idxTable = table->getindexTable();
+	if (idxTable.empty() == 1) { return false; }
+
+	*fout << "{StandardItem.Frequency}		(Path_Item.Frequency)" << endl;
 	FPNode* curFP_Node;
 	FPNode* up;
 	FPNode* next;
-	for(list<pair<int, string>>::iterator iter = idxTable.begin(); iter!=idxTable.end();iter++)
+	for (list<pair<int, string>>::iterator iter = idxTable.begin(); iter != idxTable.end(); iter++)
 	{
 		if (iter->first >= threshold) // small threshold is not print
 		{
@@ -181,6 +235,8 @@ bool FPGrowth::printTree() {
 	table->descendingIndexTable();
 	return true;
 }
-void FPGrowth::saveFrequentPatterns(){
+void FPGrowth::saveFrequentPatterns() {
+
+
 
 }

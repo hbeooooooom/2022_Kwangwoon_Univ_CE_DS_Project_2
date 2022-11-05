@@ -10,14 +10,14 @@ class FPGrowth
 private:
 	int threshold;
 	FPNode* fpTree; //this is root
-	HeaderTable* table; //this is first 
+	HeaderTable* table; //headerTable
 	map<set<string>, int> frequenctPatterns;
 	ofstream* fout;
 	ofstream flog;
 public:
 	FPGrowth(ofstream *fout, int threshold) {
 		this->threshold = threshold;
-		flog.open("result.txt", ios::app);
+		flog.open("result.txt", ios::out);
 		flog.setf(ios::fixed);
 		fpTree = new FPNode;  table = new HeaderTable;
 		this->fout = fout;
@@ -31,8 +31,9 @@ public:
 		table->ascendingIndexTable();
 		frequenctPatterns = getFrequentPatterns(table, fpTree);
 	}
-
-	map<set<string>, int> getFrequentPatterns(HeaderTable* pTable, FPNode* pTree);
+	
+	bool printPatern();
+	map<set<string>, int> getFrequentPatterns(HeaderTable* Table, FPNode* Tree);
 	void powerSet(map<set<string>, int>* FrequentPattern, vector<string> data, string item, int frequency, int* flag, int depth);
 	bool contains_single_path(FPNode* pNode);
 	int item_frequency(string item) {return table->find_frequency(item);}

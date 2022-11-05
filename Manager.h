@@ -15,7 +15,7 @@ public:
 	{
 		fout.open(RESULT_LOG_PATH,ios::out);
 		fpgrowth = new FPGrowth(&fout,threshold);
-		
+		bptree = new BpTree(&fout,bpOrder);
 	}
 
 
@@ -38,7 +38,7 @@ public:
 	bool PRINT_RANGE(char* item, int start, int end);
 	bool PRINT_CONFIDENCE(char* item, double rate);
 	bool PRINT_BPTREE(char* item, int min_frequency);
-
+	
 
 	void printErrorCode(int n);
 	void printSuccessCode();

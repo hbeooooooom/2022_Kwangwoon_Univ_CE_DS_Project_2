@@ -54,6 +54,15 @@ void Manager::run(const char* command)
 			else 
 				printErrorCode(400);
 		}
+		else if(strcmp(command,"SAVE")==0){
+			fout<<"========SAVE========="<<endl;
+			fpgrowth->frequenctPatternSetting();
+			bool a = fpgrowth->printPatern();
+			if(a == true){
+				printSuccessCode();
+			}
+			else printErrorCode(800);
+		}
 	}
 	fin.close();
 	return;
@@ -68,6 +77,7 @@ bool Manager::PRINT_ITEMLIST(){
 		return false;
 	
 }
+
 bool Manager::LOAD()
 {
 	list<string> data_list;
