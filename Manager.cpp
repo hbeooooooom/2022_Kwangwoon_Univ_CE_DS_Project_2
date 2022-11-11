@@ -26,9 +26,9 @@ void Manager::run(const char* command)
 			}
 			
 		}
-		else if(strcmp(command,"BTLOAD")==0){
+		else if(strcmp(command,"BTLOAD")==0){ // if command BTLOAD
 			fout<<"========BTLOAD========"<<endl;
-			bool a = BTLOAD();
+			bool a = BTLOAD();//check true or false
 			if(a==true){
 				printSuccessCode();
 			}
@@ -37,7 +37,7 @@ void Manager::run(const char* command)
 
 		}
 		else if(strcmp(command,"PRINT_ITEMLIST")==0){// if command PRINT_ITEMLIST
-			bool a = PRINT_ITEMLIST();
+			bool a = PRINT_ITEMLIST();//check true or false
 			if(a == false){
 				printErrorCode(300);
 			}
@@ -45,23 +45,23 @@ void Manager::run(const char* command)
 				fout<<"=================="<<endl;
 			}
 		}
-		else if(strcmp(command,"PRINT_FPTREE")==0){
+		else if(strcmp(command,"PRINT_FPTREE")==0){ // if command PRINT_FPTREE
 			fout<<"========PRINT_FPTREE======="<<endl;
-			bool a = PRINT_FPTREE();
+			bool a = PRINT_FPTREE();//check true or false
 			if(a== true){
 				fout<<"============================"<<endl;
 			}
 			else 
 				printErrorCode(400);
 		}
-		else if(strcmp(command,"PRINT_BPTREE")==0){
+		else if(strcmp(command,"PRINT_BPTREE")==0){ // if command PRINT_BPTREE
 
 			fout<<"=======PRINT_BPTREE======="<<endl;
 
 			char* cmd2 = strtok(NULL," ");
 			char* cmd3 = strtok(NULL,"\n");
 			int k = atoi(cmd3);
-			bool a = PRINT_BPTREE(cmd2,k);
+			bool a = PRINT_BPTREE(cmd2,k);//check true or false
 			if(a == false)
 			{
 				printErrorCode(500);
@@ -70,10 +70,43 @@ void Manager::run(const char* command)
 				fout<<"========================="<<endl;
 			}
 		}
-		else if(strcmp(command,"SAVE")==0){
+		else if(strcmp(command,"PRINT_CONFIDENCE")==0) // if command PRINT_CONFIDENCE
+		{
+			fout<<"=======PRINT_CONFIDENCT======="<<endl;
+			char* cmd2 = strtok(NULL," ");
+			char* cmd3 = strtok(NULL,"\n");
+			double k = atof(cmd3);
+			bool a = PRINT_CONFIDENCE(cmd2, k);//check true or false
+			if( a == false)
+			{
+				printErrorCode(600);
+			}
+			else{
+				fout<<"============================="<<endl;
+			}
+			
+		}
+		else if(strcmp(command,"PRINT_RANGE")==0){ // if PRINT_RANGE
+			char* cmd2 = strtok(NULL," ");
+			char* cmd3 = strtok(NULL," ");
+			char* cmd4 = strtok(NULL,"\n");
+			int k = atoi(cmd3);
+			int kk = atoi(cmd4);
+			fout<<"========PRINT_RANGE======="<<endl;
+			bool a = PRINT_RANGE(cmd2,k,kk);//check true or false
+			if( a == false)
+			{
+				printErrorCode(700);
+			}
+			else{
+				fout<<"========================="<<endl;
+			}
+
+		}
+		else if(strcmp(command,"SAVE")==0){ // if command SAVE
 			fout<<"========SAVE========="<<endl;
 			fpgrowth->frequenctPatternSetting();
-			bool a = fpgrowth->printPatern();
+			bool a = fpgrowth->printPatern();//check true or false
 			if(a == true){
 				printSuccessCode();
 			}
@@ -85,7 +118,7 @@ void Manager::run(const char* command)
 }
 bool Manager::PRINT_ITEMLIST(){
 	fout<<"=======PRINT_ITEMLIST======="<<endl;
-	bool a = fpgrowth->printList();
+	bool a = fpgrowth->printList();//check true or false and print
 	if(a){ // if not empty Header Table
 		return true;
 	}
@@ -99,7 +132,7 @@ bool Manager::LOAD()
 	list<string> data_list;
 	
 	ifstream market;
-	market.open("market.txt");
+	market.open("market.txt"); //open market.txt
 	if(!market){
 		return false;
 	}
@@ -131,11 +164,11 @@ bool Manager::LOAD()
 	market.close();
 	fpgrowth->getHeaderTable()->insertDataNode(fpgrowth->getHeaderTable()); //make data table
 	temp = NULL;
-	market.open("market.txt");
+	market.open("market.txt"); //reopen market.txt
 	while(!market.eof()){
 		market.getline(buf1, 10000);
 		strcpy(buf2,buf1);
-		list<string>buylist;
+		list<string>buylist; //save buy list
 		temp = strtok(buf1, "	");
 		if(temp == NULL){
 			continue;
@@ -147,7 +180,7 @@ bool Manager::LOAD()
 		temp = strtok(buf2, "	");
 		while(temp!=NULL){
 			string string_temp = temp;
-			buylist.push_back(string_temp);
+			buylist.push_back(string_temp); //save items
 			temp = strtok(NULL, "	");
 			if(temp == NULL){
 				continue;
@@ -164,7 +197,7 @@ bool Manager::BTLOAD()
 	char buf[3000] = { 0 };
 	char buf2[3000] = { 0 };
 	char* temp = NULL;
-	fin.open("result.txt");
+	fin.open("result.txt"); // open result.txt
 	if (!fin) {//file open error
 		return false;
 	}
@@ -172,7 +205,7 @@ bool Manager::BTLOAD()
 	while (!fin.eof())
 	{
 		fin.getline(buf, 150);
-		set<string> tempset;
+		set<string> tempset; //save items set
 		int tempkey = 0;
 		strcpy(buf2, buf);
 		temp = strtok(buf, "	");
@@ -198,7 +231,7 @@ bool Manager::BTLOAD()
 
 
 bool Manager::PRINT_FPTREE() {
-	bool a = fpgrowth->printTree();
+	bool a = fpgrowth->printTree();//check true or false and print tree
 	if( a==true){
 		return true;
 	}
@@ -207,10 +240,21 @@ bool Manager::PRINT_FPTREE() {
 }
 bool Manager::PRINT_BPTREE(char* item, int min_frequency)
 {
-	bool a = bptree->printFrequency(item, min_frequency);
+	bool a = bptree->printFrequency(item, min_frequency);//check true or false and print
 	return a;
 }
 
+bool Manager::PRINT_RANGE(char* item, int start, int end){
+	string s=item;
+	bool a = bptree->printRange(s,start,end);//check true or false and print
+	return a;
+}
+bool Manager::PRINT_CONFIDENCE(char* item, double rate)
+{
+	string s =item;
+	bool a = bptree->printConfidence(s,fpgrowth->getHeaderTable()->find_frequency(s),rate);//check true or false and print
+	return a;
+}
 void Manager::printErrorCode(int n) {				//ERROR CODE PRINT
 	fout << "ERROR " << n << endl;
 	fout << "=======================" << endl << endl;

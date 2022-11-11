@@ -31,7 +31,7 @@ void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_
 		{
 			if (frequence_iter->second == *customer_iter)
 			{
-				sorting_list.push_back({ frequence_iter->first, frequence_iter->second });
+				sorting_list.push_back({ frequence_iter->first, frequence_iter->second }); //push data
 				break;
 			}
 		}
@@ -44,18 +44,18 @@ void FPGrowth::createFPtree(FPNode* root, HeaderTable* table, list<string> item_
 	for (list<pair<int, string>>::iterator iter = sorting_list.begin(); iter != sorting_list.end(); iter++) { //make fp tree and connect table , node
 		FPNode* child_node = currNode->getChildrenNode(iter->second);//because root is NULL
 		if (child_node == NULL) {//item in tree is false
-			FPNode* newNode = new FPNode;
-			string str = iter->second;
-			newNode->setItem(str);
-			newNode->setParent(currNode);
-			newNode->updateFrequency(1);
-			currNode->pushchildren(str, newNode);
-			connectNode(table, str, newNode);
+			FPNode* newNode = new FPNode; // create node
+			string str = iter->second; 
+			newNode->setParent(currNode); //set parent
+			newNode->setItem(str); //set item
+			newNode->updateFrequency(1); //update frequency
+			currNode->pushchildren(str, newNode); // set children node
+			connectNode(table, str, newNode); // connect fp node data table
 			currNode = newNode;
 		}
 		else {
-			currNode = child_node;
-			currNode->updateFrequency(1);
+			currNode = child_node; //go child node
+			currNode->updateFrequency(1);//update frequency +1
 		}
 	}
 }
@@ -68,18 +68,17 @@ void FPGrowth::connectNode(HeaderTable* table, string item, FPNode* node) {
 		{
 			if (iter->second->getFrequency() == 0) //if FPNode is empty
 			{
-				table->conNode(item, node);
-				//DATA_Table.find(item)->second = node; //connect node
+				table->conNode(item, node); // connect node
 				return;
 			}
 			else
 			{
 				currNode = iter->second;
 				while (1) {
-					if (currNode->getNext() == NULL) {
+					if (currNode->getNext() == NULL) { //if next node NULL
 						break;
 					}
-					currNode = currNode->getNext();
+					currNode = currNode->getNext(); //go next node
 				}
 				currNode->setNext(node); //connect next node
 				return;
@@ -95,7 +94,7 @@ bool FPGrowth::contains_single_path(FPNode* pNode) {
 }
 
 map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* Tree) {
-	Table->ascendingIndexTable();
+	Table->ascendingIndexTable(); //ascending table
 	map<string, FPNode*> dataTable = Table->getdataTable();
 	list<pair<int, string>> idxTable = Table->getindexTable();
 	
@@ -154,13 +153,13 @@ map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* 
 
 bool FPGrowth::printPatern()
 {
-	if (frequenctPatterns.begin() == frequenctPatterns.end())
+	if (frequenctPatterns.begin() == frequenctPatterns.end()) // if no pattern
 		return false;
 	for (map<set<string>, int>::iterator iter = frequenctPatterns.begin(); iter != frequenctPatterns.end(); iter++)
 	{
 		flog << iter->second << "	";
-		set<string>temp = iter->first;
-		for (set<string>::iterator iter2 = temp.begin(); iter2 != temp.end(); iter2++)
+		set<string>temp = iter->first; 
+		for (set<string>::iterator iter2 = temp.begin(); iter2 != temp.end(); iter2++) //print pattern
 		{
 			flog << *iter2 << "	";
 		}
@@ -183,9 +182,9 @@ void FPGrowth::powerSet(map<set<string>, int>* FrequentPattern, vector<string> d
 
 bool FPGrowth::printList() {
 	list<pair<int, string>> li = table->getindexTable();
-	if (li.begin() != li.end()) *fout << "Item		Frequency" << endl;
-	else return false;
-	for (list<pair<int, string>>::iterator it = li.begin(); it != li.end(); it++) {
+	if (li.begin() != li.end()) *fout << "Item		Frequency" << endl; 
+	else return false; //not exist indextable
+	for (list<pair<int, string>>::iterator it = li.begin(); it != li.end(); it++) { //print indexnode
 		*fout << it->second << "	  " << it->first << endl;
 	}
 	return true;
@@ -193,28 +192,28 @@ bool FPGrowth::printList() {
 bool FPGrowth::printTree() {
 
 	table->ascendingIndexTable(); // ascending index table
-	list<pair<int, string>> idxTable = table->getindexTable();
-	if (idxTable.empty() == 1) { return false; }
+	list<pair<int, string>> idxTable = table->getindexTable(); //get indextable
+	if (idxTable.empty() == 1) { return false; } // if not exist indexTable
 
 	*fout << "{StandardItem.Frequency}		(Path_Item.Frequency)" << endl;
 	FPNode* curFP_Node;
-	FPNode* up;
+	FPNode* up_node;
 	FPNode* next;
 	for (list<pair<int, string>>::iterator iter = idxTable.begin(); iter != idxTable.end(); iter++)
 	{
 		if (iter->first >= threshold) // small threshold is not print
 		{
-			*fout << "{" << iter->second << ", " << iter->first << "}" << endl; //print item
+			*fout << "{" << iter->second << ", " << iter->first << "}" << endl; //print item list
 			curFP_Node = table->getNode(iter->second);
 			*fout << "(" << curFP_Node->getItem() << "," << curFP_Node->getFrequency() << ")  ";
-			up = curFP_Node->getParent();
+			up_node = curFP_Node->getParent(); //up_node get current fpnode parent node
 			while (1)
 			{
-				if (up->getFrequency() == 0) break; //if Frequency 0 is root
+				if (up_node->getFrequency() == 0) break; //if Frequency 0 is root
 				else
 				{
-					*fout << "(" << up->getItem() << "," << up->getFrequency() << ")  ";
-					up = up->getParent(); //move parent node
+					*fout << "(" << up_node->getItem() << "," << up_node->getFrequency() << ")  ";
+					up_node = up_node->getParent(); //move parent node
 				}
 			}
 
@@ -225,14 +224,14 @@ bool FPGrowth::printTree() {
 				while (1)
 				{
 					*fout << "(" << next->getItem() << "," << next->getFrequency() << ")" << "  ";
-					up = next->getParent();//up to paraent
+					up_node = next->getParent();//up to paraent
 					while (1)
 					{
-						if (up->getFrequency() == 0)// frequency 0 is root
+						if (up_node->getFrequency() == 0)// frequency 0 is root
 							break;
 						else {
-							*fout << "(" << up->getItem() << "," << up->getFrequency() << ")" << "  ";
-							up = up->getParent();
+							*fout << "(" << up_node->getItem() << "," << up_node->getFrequency() << ")" << "  ";
+							up_node = up_node->getParent(); // get parent node for up_node
 						}
 					}
 					if (next->getNext() == NULL) {
@@ -247,7 +246,7 @@ bool FPGrowth::printTree() {
 			}
 		}
 	}
-	table->descendingIndexTable();
+	table->descendingIndexTable(); // descending indextable
 	return true;
 }
 void FPGrowth::saveFrequentPatterns() {

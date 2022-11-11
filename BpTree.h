@@ -19,18 +19,20 @@ public:
 	}
 	~BpTree();
 	/* essential */
-	bool		Insert(int key, set<string> set);
-	bool		excessDataNode(BpTreeNode* pDataNode);
-	bool		excessIndexNode(BpTreeNode* pIndexNode);
-	void		splitDataNode(BpTreeNode* pDataNode);
-	void		splitIndexNode(BpTreeNode* pIndexNode);
-	BpTreeNode* getRoot() { return root; }
-	BpTreeNode* searchDataNode(int n);
-	BpTreeNode* searchDataNode1(int n);	
-	void	printFrequentPatterns(set<string> pFrequentPattern, string item,int k);
-	bool	printFrequency(string item, int min_frequency);
-	bool	printConfidence(string item, double item_frequency, double min_confidence);
-	bool 	printRange(string item, int min, int max);
+	bool		Insert(int key, set<string> set); //insert function
+	bool		excessDataNode(BpTreeNode* pDataNode); //excessDataNode function
+	bool		excessIndexNode(BpTreeNode* pIndexNode); //excessIndexNode function
+	void		splitDataNode(BpTreeNode* pDataNode); //splitDatanode function
+	void		splitIndexNode(BpTreeNode* pIndexNode); //splitIndexNode function
+	BpTreeNode* getRoot() { return root; } //get root data fucntion
+	BpTreeNode* searchDataNode(int n); //find have n frequency data node fucntion
+	BpTreeNode* searchDataNode1(int n);	 //find have n frequency data node fucntion
+	BpTreeNode* searchDataNode2(); //find data node fucntion
+	void	printFrequentPatterns(set<string> pFrequentPattern, string item,int k); //printFrequentPatterns function
+	void	printFrequentPatterns(set<string> pFrequentPattern, string item,double k,int kk);//printFrequentPatterns fucntion
+	bool	printFrequency(string item, int min_frequency);//printFrequency function
+	bool	printConfidence(string item, double item_frequency, double min_confidence); // printConfidence function
+	bool 	printRange(string item, int min, int max); // printRange fucntion
 
 };
 

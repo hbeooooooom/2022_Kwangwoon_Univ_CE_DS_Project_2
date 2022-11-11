@@ -24,3 +24,26 @@ FrequentPattern		Frequency
 {chocolate, soup, eggs}    3
 {soup, eggs}    4
 =========================
+========PRINT_RANGE=======
+FrequentPattern		Frequency
+{chocolate, eggs}    3
+{chocolate, soup, eggs}    3
+{soup, eggs}    4
+=========================
+=======PRINT_CONFIDENCT=======
+FrequentPattern		Frequency
+{almonds, eggs}    2  0.4
+{burgers, eggs}    2  0.4
+{chicken, eggs}    2  0.4
+{french fries, eggs}    2  0.4
+{mineral water, eggs}    2  0.4
+{turkey, eggs}    2  0.4
+{almonds, burgers, eggs}    2  0.4
+{almonds, soup, eggs}    2  0.4
+{burgers, soup, eggs}    2  0.4
+{chicken, mineral water, eggs}    2  0.4
+{french fries, soup, eggs}    2  0.4
+{almonds, burgers, soup, eggs}    2  0.4
+{chocolate, eggs}    3  0.6
+{chocolate, soup, eggs}    3  0.6
+{soup, eggs}    4  0.8

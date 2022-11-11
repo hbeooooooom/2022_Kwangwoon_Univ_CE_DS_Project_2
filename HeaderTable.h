@@ -11,15 +11,15 @@ public:
 	
 	HeaderTable() { }
 	~HeaderTable();
-	void insertTable(char* item, int frequency);
-	void insertTable1(char* item, int frequency);
-	list<pair<int, string>> getindexTable() { return indexTable; }
-	map<string, FPNode*> getdataTable() { return dataTable; }
-	FPNode* getNode(string item) { return dataTable.find(item)->second; }
-	void descendingIndexTable() { indexTable.sort(greater<pair<int, string>>()); }
-	void ascendingIndexTable() { indexTable.sort(); }
-	int find_frequency(string item);
-	void insertDataNode(HeaderTable* table);
+	void insertTable(char* item, int frequency); //insert data function
+	void insertTable1(char* item, int frequency); //save conditional fp tree list function
+	list<pair<int, string>> getindexTable() { return indexTable; } // get indextable function
+	map<string, FPNode*> getdataTable() { return dataTable; } // get datatable function
+	FPNode* getNode(string item) { return dataTable.find(item)->second; } // get FPNode function
+	void descendingIndexTable() { indexTable.sort(greater<pair<int, string>>()); }// descending function
+	void ascendingIndexTable() { indexTable.sort(); } //ascending function
+	int find_frequency(string item); // find_item function
+	void insertDataNode(HeaderTable* table); // insert datanode function
 	void conNode(string item, FPNode* no) { dataTable.find(item)->second = no; }
 };
 
