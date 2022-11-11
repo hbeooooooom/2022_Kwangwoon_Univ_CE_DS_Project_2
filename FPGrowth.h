@@ -17,7 +17,7 @@ private:
 public:
 	FPGrowth(ofstream *fout, int threshold) {
 		this->threshold = threshold;
-		flog.open("result.txt", ios::out);
+		flog.open("result.txt", ios::app);
 		flog.setf(ios::fixed);
 		fpTree = new FPNode;  table = new HeaderTable;
 		this->fout = fout;

@@ -54,6 +54,22 @@ void Manager::run(const char* command)
 			else 
 				printErrorCode(400);
 		}
+		else if(strcmp(command,"PRINT_BPTREE")==0){
+
+			fout<<"=======PRINT_BPTREE======="<<endl;
+
+			char* cmd2 = strtok(NULL," ");
+			char* cmd3 = strtok(NULL,"\n");
+			int k = atoi(cmd3);
+			bool a = PRINT_BPTREE(cmd2,k);
+			if(a == false)
+			{
+				printErrorCode(500);
+			}
+			else{
+				fout<<"========================="<<endl;
+			}
+		}
 		else if(strcmp(command,"SAVE")==0){
 			fout<<"========SAVE========="<<endl;
 			fpgrowth->frequenctPatternSetting();
@@ -144,16 +160,38 @@ bool Manager::LOAD()
 }
 bool Manager::BTLOAD()
 {
-	ifstream result;
-	result.open("result.txt");
-	if(!result){
+	ifstream fin;
+	char buf[3000] = { 0 };
+	char buf2[3000] = { 0 };
+	char* temp = NULL;
+	fin.open("result.txt");
+	if (!fin) {//file open error
 		return false;
 	}
-	char buf1[10000] ={0};
-	char buf2[10000] = {0};
-	char* temp = NULL;
-	while(!result.eof()){
-		result.getline(buf1,10000);
+
+	while (!fin.eof())
+	{
+		fin.getline(buf, 150);
+		set<string> tempset;
+		int tempkey = 0;
+		strcpy(buf2, buf);
+		temp = strtok(buf, "	");
+		if (temp == NULL)continue;
+		temp = strtok(NULL, "	");
+		while (temp != NULL)
+		{
+			temp = strtok(NULL, "	");
+		}
+		temp = strtok(buf2, "	");
+		tempkey = (atoi(temp));//get frequency
+		temp = strtok(NULL, "	");
+		while (temp != NULL)
+		{
+			string tempstring(temp);
+			tempset.insert(tempstring);
+			temp = strtok(NULL, "	");
+		}
+		bptree->Insert(tempkey, tempset);//insert to bptree
 	}
 	return true;
 }
@@ -167,7 +205,11 @@ bool Manager::PRINT_FPTREE() {
 	else
 		return false;
 }
-
+bool Manager::PRINT_BPTREE(char* item, int min_frequency)
+{
+	bool a = bptree->printFrequency(item, min_frequency);
+	return a;
+}
 
 void Manager::printErrorCode(int n) {				//ERROR CODE PRINT
 	fout << "ERROR " << n << endl;

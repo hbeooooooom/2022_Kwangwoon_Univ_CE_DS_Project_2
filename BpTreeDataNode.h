@@ -27,6 +27,8 @@ public:
 		mapData.erase(n);
 	}
 	map<int, FrequentPatternNode*>* getDataMap() { return &mapData; }
+
+	
 };
 
 #endif

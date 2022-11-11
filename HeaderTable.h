@@ -12,6 +12,7 @@ public:
 	HeaderTable() { }
 	~HeaderTable();
 	void insertTable(char* item, int frequency);
+	void insertTable1(char* item, int frequency);
 	list<pair<int, string>> getindexTable() { return indexTable; }
 	map<string, FPNode*> getdataTable() { return dataTable; }
 	FPNode* getNode(string item) { return dataTable.find(item)->second; }

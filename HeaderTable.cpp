@@ -11,6 +11,20 @@ void HeaderTable::insertDataNode(HeaderTable* table){
 		dataTable.insert({iter->second,food_ptr});
 	}
 }
+void HeaderTable::insertTable1(char* item, int frequency) {
+	string change_item = item;//change string
+	
+		for (list<pair<int, string>>::iterator iter = indexTable.begin(); iter != indexTable.end(); iter++) {
+			if (iter->second == item) {
+				iter->first += frequency;
+				return;
+		}
+	}
+	indexTable.push_back({ frequency,change_item });
+	descendingIndexTable();
+}
+
+
 void HeaderTable::insertTable(char* item, int frequency) {
 	string change_item = item;//change string
 	if(frequency == 0){

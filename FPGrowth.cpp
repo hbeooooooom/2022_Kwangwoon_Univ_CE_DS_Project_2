@@ -1,5 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "FPGrowth.h"
-
 
 FPGrowth::~FPGrowth() {
 
@@ -98,7 +98,7 @@ map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* 
 	Table->ascendingIndexTable();
 	map<string, FPNode*> dataTable = Table->getdataTable();
 	list<pair<int, string>> idxTable = Table->getindexTable();
-	FPNode* currNode;
+	
 
 	int k;
 	for (list<pair<int, string>>::iterator iter = idxTable.begin(); iter != idxTable.end(); iter++)
@@ -109,31 +109,46 @@ map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* 
 			{
 				if (iter2->first.compare(iter->second) == 0)
 				{
+					list<list<string>> save_freqeunt_list;
 					FPNode* currNode = iter2->second;//찾은걸 노드로 연결
-					cout << currNode->getItem() << " " << currNode->getFrequency() << endl;//확인용 지울것
-					while (1) {
-						if (currNode->getFrequency() >= threshold)
+
+					HeaderTable* frequent_fptree = new HeaderTable;//새로 연결할 list와 map들 만들기
+
+					while (1) 
+					{
+						list<string> frequent_buy_list;
+						FPNode* tempNode = currNode;
+						if (currNode == NULL) { break; }
+						int get_f = currNode->getFrequency();
+						while (1)
 						{
-							set<string> pattern_set;
-							k = currNode->getFrequency();
-							while (1)
-							{
-								pattern_set.insert(currNode->getItem());
-								if (currNode->getParent() == NULL)	break;
-								currNode = currNode->getParent();
-							}
-							frequenctPatterns.insert(make_pair(pattern_set, k));
+							if (currNode->getParent() == NULL) { break; }
+							string a = currNode->getItem();
+							char aa[100];
+							strcpy(aa, a.c_str());
+							frequent_fptree->insertTable1(aa, get_f); // 전체다 저장 index 테이블 만드는거 
+							frequent_buy_list.push_back(currNode->getItem());//한라인 저장
+							//cout << currNode->getItem() << "	" << currNode->getFrequency() << endl;
+							currNode = currNode->getParent();
 						}
-						
-							if (currNode->getNext() == NULL) break;
-							currNode = currNode->getNext();
-						
+						currNode = tempNode->getNext();
+						save_freqeunt_list.push_back(frequent_buy_list);			
 					}
+					frequent_fptree->descendingIndexTable();
+					frequent_fptree->insertDataNode(frequent_fptree);// 새로딴거 데이터 테이블까지
+					FPNode* frequent_root = new FPNode;
+					for (list<list<string>>::iterator i = save_freqeunt_list.begin(); i != save_freqeunt_list.end(); i++)
+					{
+						createFPtree(frequent_root, frequent_fptree, *i, 1);
+					}
+					//트리르 만듬 그럼 이제? 추출을 해야함
+					//for문으로 index 테이블에서 ~에 대한 conditional fp-tree인지 찾고
+					//datatable 위에 한칸보고 
+
 				}
 			}
 		}
 	}
-
 	return  frequenctPatterns;
 }
 
