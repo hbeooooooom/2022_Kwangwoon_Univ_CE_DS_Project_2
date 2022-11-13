@@ -129,8 +129,8 @@ bool Manager::PRINT_ITEMLIST(){
 
 bool Manager::LOAD()
 {
+	if(fpgrowth->getTree()->getChildren().size() != 0){	return false;} //if fptree exist return false
 	list<string> data_list;
-	
 	ifstream market;
 	market.open("market.txt"); //open market.txt
 	if(!market){
@@ -139,7 +139,7 @@ bool Manager::LOAD()
 	char buf1[10000] = {0};
 	char buf2[10000] = {0};
 	char* temp = NULL;
-
+	
 	while(!market.eof()){
 		market.getline(buf1,10000);
 		strcpy(buf2,buf1);
@@ -193,6 +193,7 @@ bool Manager::LOAD()
 }
 bool Manager::BTLOAD()
 {
+	if(bptree->getRoot() != NULL){return false;	} // is exist bptree return false
 	ifstream fin;
 	char buf[3000] = { 0 };
 	char buf2[3000] = { 0 };

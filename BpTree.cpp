@@ -211,8 +211,8 @@ bool BpTree::printConfidence(string item, double item_frequency, double min_conf
 }
 bool BpTree::printFrequency(string item, int min_frequency)//print winratio in ascending order
 {
-	if (root == NULL) return false;
 	*fout << "FrequentPattern		Frequency" << endl;
+	if (root == NULL) return false;
 	BpTreeNode* currNode = searchDataNode(min_frequency);// find frequency > min_frequency data node
 	multimap<int, set<string>> list = currNode->getDataMap()->begin()->second->getList();
 	multimap<int, set<string>>::iterator iter1 = list.begin();
