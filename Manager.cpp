@@ -264,4 +264,3 @@ void Manager::printSuccessCode() {//SUCCESS CODE PRINT
 	fout << "Success" << endl;
 	fout << "=======================" << endl << endl;
 }
-

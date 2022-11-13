@@ -26,8 +26,6 @@ public:
 	void		splitIndexNode(BpTreeNode* pIndexNode); //splitIndexNode function
 	BpTreeNode* getRoot() { return root; } //get root data fucntion
 	BpTreeNode* searchDataNode(int n); //find have n frequency data node fucntion
-	BpTreeNode* searchDataNode1(int n);	 //find have n frequency data node fucntion
-	BpTreeNode* searchDataNode2(); //find data node fucntion
 	void	printFrequentPatterns(set<string> pFrequentPattern, string item,int k); //printFrequentPatterns function
 	void	printFrequentPatterns(set<string> pFrequentPattern, string item,double k,int kk);//printFrequentPatterns fucntion
 	bool	printFrequency(string item, int min_frequency);//printFrequency function
