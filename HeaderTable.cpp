@@ -10,8 +10,8 @@ void HeaderTable::insertDataNode(HeaderTable* table){// insert datatable
 		dataTable.insert({iter->second,food_ptr});// insert
 	}
 }
-void HeaderTable::insertTable1(char* item, int frequency) { //save conditional fp tree list function
-	string change_item = item;//change string
+void HeaderTable::insertTable1(string item, int frequency) { //save conditional fp tree list function
+	
 	
 		for (list<pair<int, string>>::iterator iter = indexTable.begin(); iter != indexTable.end(); iter++) {
 			if (iter->second == item) { // if exist item
@@ -19,7 +19,7 @@ void HeaderTable::insertTable1(char* item, int frequency) { //save conditional f
 				return;
 		}
 	}
-	indexTable.push_back({ frequency,change_item }); // not exist item make table
+	indexTable.push_back({ frequency,item }); // not exist item make table
 	descendingIndexTable();
 }
 

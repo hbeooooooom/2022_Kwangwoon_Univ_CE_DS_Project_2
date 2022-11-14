@@ -12,7 +12,7 @@ public:
 	HeaderTable() { }
 	~HeaderTable();
 	void insertTable(char* item, int frequency); //insert data function
-	void insertTable1(char* item, int frequency); //save conditional fp tree list function
+	void insertTable1(string item, int frequency); //save conditional fp tree list function
 	list<pair<int, string>> getindexTable() { return indexTable; } // get indextable function
 	map<string, FPNode*> getdataTable() { return dataTable; } // get datatable function
 	FPNode* getNode(string item) { return dataTable.find(item)->second; } // get FPNode function
