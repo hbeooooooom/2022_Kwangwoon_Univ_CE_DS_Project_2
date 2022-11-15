@@ -12,7 +12,7 @@ void Manager::run(const char* command)
 	while (!fin.eof())
 	{
 		fin.getline(cmd, 1000);
-		char* command = strtok(cmd, " ");//get command
+		char* command = strtok(cmd, "\t");//get command
 		if(command ==NULL)
 			continue;
 		if(strcmp(command, "LOAD")==0){//if command LOAD
@@ -58,7 +58,7 @@ void Manager::run(const char* command)
 
 			fout<<"=======PRINT_BPTREE======="<<endl;
 
-			char* cmd2 = strtok(NULL," ");
+			char* cmd2 = strtok(NULL,"\t");
 			char* cmd3 = strtok(NULL,"\n");
 			int k = atoi(cmd3);
 			bool a = PRINT_BPTREE(cmd2,k);//check true or false
@@ -73,7 +73,7 @@ void Manager::run(const char* command)
 		else if(strcmp(command,"PRINT_CONFIDENCE")==0) // if command PRINT_CONFIDENCE
 		{
 			fout<<"=======PRINT_CONFIDENCT======="<<endl;
-			char* cmd2 = strtok(NULL," ");
+			char* cmd2 = strtok(NULL,"\t");
 			char* cmd3 = strtok(NULL,"\n");
 			double k = atof(cmd3);
 			bool a = PRINT_CONFIDENCE(cmd2, k);//check true or false
@@ -87,8 +87,8 @@ void Manager::run(const char* command)
 			
 		}
 		else if(strcmp(command,"PRINT_RANGE")==0){ // if PRINT_RANGE
-			char* cmd2 = strtok(NULL," ");
-			char* cmd3 = strtok(NULL," ");
+			char* cmd2 = strtok(NULL,"\t");
+			char* cmd3 = strtok(NULL,"\t");
 			char* cmd4 = strtok(NULL,"\n");
 			int k = atoi(cmd3);
 			int kk = atoi(cmd4);

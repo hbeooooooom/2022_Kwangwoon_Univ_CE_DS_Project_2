@@ -27,7 +27,7 @@ public:
 	BpTreeNode* getRoot() { return root; } //get root data fucntion
 	BpTreeNode* searchDataNode(int n); //find have n frequency data node fucntion
 	void	printFrequentPatterns(set<string> pFrequentPattern, string item,int k); //printFrequentPatterns function
-	void	printFrequentPatterns(set<string> pFrequentPattern, string item,double k,int kk);//printFrequentPatterns fucntion
+	void	printFrequentPatterns(set<string> pFrequentPattern, string item,double k,double kk);//printFrequentPatterns fucntion
 	bool	printFrequency(string item, int min_frequency);//printFrequency function
 	bool	printConfidence(string item, double item_frequency, double min_confidence); // printConfidence function
 	bool 	printRange(string item, int min, int max); // printRange fucntion
