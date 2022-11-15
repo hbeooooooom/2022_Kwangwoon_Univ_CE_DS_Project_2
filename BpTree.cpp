@@ -41,23 +41,23 @@ BpTreeNode* BpTree::searchDataNode(int n) {
 	if (pCur == NULL) return pCur;
 	if (pCur->getMostLeftChild() == NULL) return pCur;
 	while (1) {
-		while (pCur->getMostLeftChild() != NULL) { pCur = pCur->getMostLeftChild(); }
+		while (pCur->getMostLeftChild() != NULL) { pCur = pCur->getMostLeftChild(); } //go to datanode
 
 		map<int, FrequentPatternNode*>::iterator iter_search = pCur->getDataMap()->begin();
 		while (1) {
-			if (n > iter_search->first) {
-				if (pCur->getNext() == NULL) return pCur;
+			if (n > iter_search->first) { // if n > frequency 
+				if (pCur->getNext() == NULL) return pCur; // if last data node
 				pCur = pCur->getNext();
-				iter_search = pCur->getDataMap()->begin();
-				if (n < iter_search->first) {
+				iter_search = pCur->getDataMap()->begin(); 
+				if (n < iter_search->first) { // if next node frequency > n
 					pCur = pCur->getPrev();
 					return pCur;
 				}
-				for (; iter_search != pCur->getDataMap()->end(); iter_search++) {
-					if (n <= iter_search->first) { return pCur; }
+				for (; iter_search != pCur->getDataMap()->end(); iter_search++) { 
+					if (n <= iter_search->first) { return pCur; } // if n < first frequency return datanode
 				}
 				if (pCur->getNext() == NULL) { return pCur; }
-				iter_search = pCur->getDataMap()->begin();
+				iter_search = pCur->getDataMap()->begin(); // if last datanode return
 			}
 			else if (n <= iter_search->first) { return pCur; }
 		}
@@ -124,7 +124,7 @@ void BpTree::splitIndexNode(BpTreeNode* pIndexNode) {
 	list<int> save_delete_frequency;
 	map<int, BpTreeNode*> cutNode;
 	int cut_frequent = 0;
-	for (map <int, BpTreeNode*>::iterator iter = pIndexNode->getIndexMap()->end(); iter != pIndexNode->getIndexMap()->begin(); ) {//앞뒤 자르고 위로 올라갈 노드의 frequent 뽑기
+	for (map <int, BpTreeNode*>::iterator iter = pIndexNode->getIndexMap()->end(); iter != pIndexNode->getIndexMap()->begin(); ) {
 		--iter;
 		if (count == a) {// if list is center
 			cut_frequent = iter->first; // cut indexnode get frequent
@@ -180,35 +180,43 @@ bool BpTree::printConfidence(string item, double item_frequency, double min_conf
 	if (root == NULL) return false;
 	double k = min_confidence * item_frequency; // Subset frequency divided by total frequency of the corresponding
 	BpTreeNode* currNode = searchDataNode(k); //go to data node
-	multimap<int, set<string>> list = currNode->getDataMap()->begin()->second->getList();
-	multimap<int, set<string>>::iterator iter1 = list.begin();
+	map <int, FrequentPatternNode*>* datNode = currNode->getDataMap();
+	map <int, FrequentPatternNode*>::iterator iter1;
+
+	multimap<int, set<string>> list = datNode->begin()->second->getList();
+	multimap<int, set<string>>::iterator iter2;
 
 	double kk;
 	*fout << "FrequentPattern		Frequency" << endl;
+	double ka;
 	while (1) {
 		if (currNode == NULL) break;
-		while (iter1 != list.end())// find all data node
+		for (iter1 = datNode->begin(); iter1 != datNode->end(); iter1++)
 		{
-			for (set<string>::iterator li = iter1->second.begin(); li != iter1->second.end(); li++)
+			list = iter1->second->getList();
+			for (iter2 = list.begin(); iter2 != list.end(); iter2++)
 			{
-				int aa = currNode->getDataMap()->begin()->second->getFrequency();
-				double aaa = aa;
-				kk = aaa / item_frequency; //get frequency
-
-				if (*li == item)
+				ka = iter1->second->getFrequency(); //get frequency
+				kk = ka / item_frequency;
+				for (set<string>::iterator li = iter2->second.begin(); li != iter2->second.end(); li++)
 				{
-
-					printFrequentPatterns(iter1->second, item, currNode->getDataMap()->begin()->second->getFrequency(), kk); //print
+					if (*li == item)
+					{
+						if (min_confidence < ka / item_frequency)
+						{
+							printFrequentPatterns(iter2->second, item, ka, kk);//print
+						}
+					}
 				}
 			}
-			iter1++;
-		}
 
+		}
 		currNode = currNode->getNext();
 		if (currNode == NULL)break;
-		list = currNode->getDataMap()->begin()->second->getList();
-		iter1 = list.begin();
+		datNode = currNode->getDataMap();
+
 	}
+
 	return true;
 }
 bool BpTree::printFrequency(string item, int min_frequency)//print winratio in ascending order
@@ -216,29 +224,37 @@ bool BpTree::printFrequency(string item, int min_frequency)//print winratio in a
 	*fout << "FrequentPattern		Frequency" << endl;
 	if (root == NULL) return false;
 	BpTreeNode* currNode = searchDataNode(min_frequency);// find frequency > min_frequency data node
-	multimap<int, set<string>> list = currNode->getDataMap()->begin()->second->getList();
-	multimap<int, set<string>>::iterator iter1 = list.begin();
+	map <int, FrequentPatternNode*>* datNode = currNode->getDataMap();
+	map <int, FrequentPatternNode*>::iterator iter1;
+	multimap<int, set<string>> list = datNode->begin()->second->getList();
+	multimap<int, set<string>>::iterator iter2;
+
 	int k;
 	while (1) {
 		if (currNode == NULL) break;
-		while (iter1 != list.end())
+		for (iter1 = datNode->begin(); iter1 != datNode->end(); iter1++)
 		{
-			for (set<string>::iterator li = iter1->second.begin(); li != iter1->second.end(); li++) // find node
+			list = iter1->second->getList();
+			for (iter2 = list.begin(); iter2 != list.end(); iter2++)
 			{
-				k = currNode->getDataMap()->begin()->second->getFrequency(); //get frequency
-				if (*li == item)
+				k = iter1->second->getFrequency(); //get frequency
+				for (set<string>::iterator li = iter2->second.begin(); li != iter2->second.end(); li++)
 				{
-					if (k >= min_frequency)  //if k >= min_frequency
-						printFrequentPatterns(iter1->second, item, k);//print
+					if (*li == item)
+					{
+						if (k >= min_frequency)
+						{
+							printFrequentPatterns(iter2->second, item, k);//print
+						}
+					}
 				}
 			}
-			iter1++;
-		}
 
+		}
 		currNode = currNode->getNext();
 		if (currNode == NULL)break;
-		list = currNode->getDataMap()->begin()->second->getList();
-		iter1 = list.begin();
+		datNode = currNode->getDataMap();
+
 	}
 	return true;
 }
@@ -246,29 +262,35 @@ bool BpTree::printRange(string item, int min, int max) {
 	if (root == NULL) return false;
 	*fout << "FrequentPattern		Frequency" << endl;
 	BpTreeNode* currNode = searchDataNode(min);// find min frequency < frequency data node
-	multimap<int, set<string>> list = currNode->getDataMap()->begin()->second->getList();
-	multimap<int, set<string>>::iterator iter1 = list.begin();
+	map <int, FrequentPatternNode*>* datNode = currNode->getDataMap();
+	map <int, FrequentPatternNode*>::iterator iter1;
+	multimap<int, set<string>> list = datNode->begin()->second->getList();
+	multimap<int, set<string>>::iterator iter2;
+
 	int k;
 	while (1) {
 		if (currNode == NULL) break;
-		while (iter1 != list.end())
+		for (iter1 = datNode->begin(); iter1 != datNode->end(); iter1++)
 		{
-			for (set<string>::iterator li = iter1->second.begin(); li != iter1->second.end(); li++) //find node
+			list = iter1->second->getList();
+			for (iter2 = list.begin(); iter2 != list.end(); iter2++)
 			{
-				k = currNode->getDataMap()->begin()->second->getFrequency();// get frequency
-				if (*li == item)
+				k = iter1->second->getFrequency(); //get frequency
+				for (set<string>::iterator li = iter2->second.begin(); li != iter2->second.end(); li++)
 				{
-					if (k >= min && k <= max) // if min <= frequency <= max
-						printFrequentPatterns(iter1->second, item, k); //print
+					if (*li == item)
+					{
+						if (k >= min && k <= max) // if min <= frequency <= max
+							printFrequentPatterns(iter2->second, item, k); //print
+					}
 				}
 			}
-			iter1++;
-		}
 
+		}
 		currNode = currNode->getNext();
 		if (currNode == NULL)break;
-		list = currNode->getDataMap()->begin()->second->getList();
-		iter1 = list.begin();
+		datNode = currNode->getDataMap();
+
 	}
 	return true;
 }
@@ -276,29 +298,26 @@ void BpTree::printFrequentPatterns(set<string> pFrequentPattern, string item, in
 
 	*fout << "{";
 	set<string> curPattern = pFrequentPattern;
-	curPattern.erase(item);
 	for (set<string>::iterator it = curPattern.begin(); it != curPattern.end();) { //print data node items
 		string temp = *it++;
-		if (temp != item) *fout << temp << ", ";
+		*fout << temp << ", ";
 		if (it == curPattern.end()) {
-			*fout << item << "}    " << k << endl;
+			*fout <<  "}    " << k << endl;
 			break;
 		}
-
 	}
 }
 void BpTree::printFrequentPatterns(set<string> pFrequentPattern, string item, double k, double kk) {
 
 	*fout << "{";
 	set<string> curPattern = pFrequentPattern;
-	curPattern.erase(item);
 	for (set<string>::iterator it = curPattern.begin(); it != curPattern.end();) { //print data node items
 		string temp = *it++;
-		if (temp != item) *fout << temp << ", ";
+		*fout << temp;
 		if (it == curPattern.end()) {
-			*fout << item << "}    " << k << "  " << kk << endl;
+			*fout <<  "}    " << k << "  " << kk << endl;
 			break;
 		}
-
+		*fout<<", ";
 	}
 }
