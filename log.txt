@@ -2,11 +2,4 @@
 Success
 =======================
 
-========BTLOAD========
-Success
-=======================
-
-=======PRINT_CONFIDENCT=======
-FrequentPattern		Frequency
-{milk, mineral water}    224  0.387543
-=============================
+========SAVE=========

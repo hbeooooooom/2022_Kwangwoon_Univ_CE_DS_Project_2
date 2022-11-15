@@ -42,14 +42,14 @@ void Manager::run(const char* command)
 				printErrorCode(300);
 			}
 			else{
-				fout<<"=================="<<endl;
+				fout<<"===================="<<endl<<endl;
 			}
 		}
 		else if(strcmp(command,"PRINT_FPTREE")==0){ // if command PRINT_FPTREE
 			fout<<"========PRINT_FPTREE======="<<endl;
 			bool a = PRINT_FPTREE();//check true or false
 			if(a== true){
-				fout<<"============================"<<endl;
+				fout<<"============================"<<endl<<endl;
 			}
 			else 
 				printErrorCode(400);
@@ -67,7 +67,7 @@ void Manager::run(const char* command)
 				printErrorCode(500);
 			}
 			else{
-				fout<<"========================="<<endl;
+				fout<<"========================="<<endl<<endl;
 			}
 		}
 		else if(strcmp(command,"PRINT_CONFIDENCE")==0) // if command PRINT_CONFIDENCE
@@ -82,7 +82,7 @@ void Manager::run(const char* command)
 				printErrorCode(600);
 			}
 			else{
-				fout<<"============================="<<endl;
+				fout<<"============================="<<endl<<endl;
 			}
 			
 		}
@@ -112,6 +112,14 @@ void Manager::run(const char* command)
 			}
 			else printErrorCode(800);
 		}
+		else if(strcmp(command,"EXIT") == 0){ // if command EXIT
+			fout<<"======EXIT======="<<endl;
+			EXIT();
+			printSuccessCode();
+		}
+		else{
+			continue;
+		}
 	}
 	fin.close();
 	return;
@@ -126,7 +134,26 @@ bool Manager::PRINT_ITEMLIST(){
 		return false;
 	
 }
-
+void Manager::EXIT()
+{
+	map<string, FPNode*> datatable = fpgrowth->getHeaderTable()->getdataTable(); //get data table
+	map<string,FPNode*>::iterator iter;
+	for(iter = datatable.begin();iter!=datatable.end();iter++)
+	{
+		FPNode* currNode = iter->second; //get node
+		while(1)
+		{
+			if(currNode == NULL) break;
+			FPNode* temp = currNode;
+			currNode = currNode->getNext();
+			delete temp; //delete
+		}
+	}
+	FPNode* rootnode = fpgrowth->getTree(); //root is null node
+	delete rootnode; //delete root node
+	HeaderTable* gethead = fpgrowth->getHeaderTable(); // get headertable
+	delete gethead; //delete headertable
+}
 bool Manager::LOAD()
 {
 	if(fpgrowth->getTree()->getChildren().size() != 0){	return false;} //if fptree exist return false

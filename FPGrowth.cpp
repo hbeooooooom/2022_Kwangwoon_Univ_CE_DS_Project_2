@@ -94,18 +94,17 @@ bool FPGrowth::contains_single_path(FPNode* pNode) {
 }
 
 map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* Tree) {
-	//Table->ascendingIndexTable(); //ascending table
-	map<string, FPNode*> dataTable = Table->getdataTable();
-	list<pair<int, string>> idxTable = Table->getindexTable();
+	map<string, FPNode*> dataTable = Table->getdataTable(); //get table
+	list<pair<int, string>> idxTable = Table->getindexTable(); // get table
 
-	for (list<pair<int, string>>::iterator iter = idxTable.begin(); iter != idxTable.end(); iter++)
+	for (list<pair<int, string>>::iterator iter = idxTable.begin(); iter != idxTable.end(); iter++) 
 	{
-		if (iter->first >= threshold)
+		if (iter->first >= threshold) // if frequent >= threshold
 		{
-			HeaderTable* new_header_table = new HeaderTable;
-			for (map<string, FPNode*>::iterator iter1 = dataTable.begin(); iter1 != dataTable.end(); iter1++)
+			HeaderTable* new_header_table = new HeaderTable; //make new headertable
+			for (map<string, FPNode*>::iterator iter1 = dataTable.begin(); iter1 != dataTable.end(); iter1++) 
 			{
-				if (iter1->first == iter->second)
+				if (iter1->first == iter->second) //find data table list
 				{
 
 					string get_item = iter->second;
@@ -125,9 +124,9 @@ map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* 
 						while (1)
 						{
 							if (currNode->getParent() == NULL) break;
-							string get_item = currNode->getItem();
-							new_header_table->insertTable1(get_item, get_frequency);
-							set_list.insert(get_item);
+							string get_item = currNode->getItem(); //get item
+							new_header_table->insertTable1(get_item, get_frequency); // make index table
+							set_list.insert(get_item);  //save item list
 
 							currNode = currNode->getParent();
 						}
@@ -148,19 +147,19 @@ map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* 
 							{
 								if (iter2->second == *iter4 && iter2->first >= threshold)
 								{
-									save_list.insert(*iter4);
+									save_list.insert(*iter4); // save   item frequency > threshold
 								}
 							}
 						}
-						if (second_map.find(save_list) == second_map.end())
+						if (second_map.find(save_list) == second_map.end()) 
 						{
-							second_map.insert({ save_list, save_frequent});
+							second_map.insert({ save_list, save_frequent});// if not exist items
 						}
 						else
 						{
 							int k = second_map.find(save_list)->second;
 							second_map.erase(save_list);
-							second_map.insert({ save_list,k + save_frequent });
+							second_map.insert({ save_list,k + save_frequent }); // if exist items
 						}
 
 					}
@@ -169,13 +168,11 @@ map<set<string>, int> FPGrowth::getFrequentPatterns(HeaderTable* Table, FPNode* 
 						vector<string>item_list;
 						for (set<string>::iterator it2 = it1->first.begin(); it2 != it1->first.end(); it2++)
 						{
-							cout << *it2 << " ";
-							item_list.push_back(*it2);
+							item_list.push_back(*it2); //make item list vector
 						}
-						cout<<it1->second << endl;
 						int* ptr = new int(item_list.size());
-						sort(item_list.begin(), item_list.end());
-						powerSet(&frequenctPatterns, item_list, get_item, it1->second, ptr, 0);
+						powerSet(&frequenctPatterns, item_list, get_item, it1->second, ptr, 0); // instance powerset function
+						delete[] ptr;
 					}
 				}
 			}

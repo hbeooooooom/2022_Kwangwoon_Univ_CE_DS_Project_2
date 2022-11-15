@@ -38,7 +38,7 @@ public:
 	bool PRINT_RANGE(char* item, int start, int end); // PRINT_RANGE function
 	bool PRINT_CONFIDENCE(char* item, double rate); // PRINT_CONFIDENCE function
 	bool PRINT_BPTREE(char* item, int min_frequency); // PRINT_BPTREE function
-	
+	void EXIT();
 
 	void printErrorCode(int n); // print error code function
 	void printSuccessCode(); //print success code
