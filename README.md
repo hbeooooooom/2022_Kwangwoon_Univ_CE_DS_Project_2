@@ -1,8 +1,8 @@
 ## DS_Project2_2022_2
 ### 2022-2 Data Structure Project #2
 
-##### 본 프로젝트에서는 FP-Growth와 B+-Tree를 이용하여 상품 추천  프로그램을 구현한다. 이 프로 
-그램은 장바구니 데이터에서 같이 구매한 상품들을 받아 FP-Growth를 구축한다. FP-Growth는 상 
+##### 본 프로젝트에서는 FP-Growth와 B+-Tree를 이용하여 상품 추천  프로그램을 구현한다. 
+이 프로그램은 장바구니 데이터에서 같이 구매한 상품들을 받아 FP-Growth를 구축한다. FP-Growth는 상 
 품들의 연관성을 Tree 구조로 저장하고 있는 FP-Tree와 상품별 빈도수 및 정보, 해당 상품과 연결 
 된 FP-Tree의 상품 노드들을 관리하는 Header Table로 구성된다. FP-Growth 구축 단계에서 연 
 관된 상품들을 묶은 Frequent Pattern들은 SAVE 명령어를 통해 result.txt에 빈도수, 상품 순으로 
